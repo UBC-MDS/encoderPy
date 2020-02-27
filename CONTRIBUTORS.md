@@ -3,7 +3,10 @@
 
 ## Development Lead
 
-* Team Maryam Mirzakhani <brayden.tang1@gmail.com>
+* Bronwyn Baillie <email>
+* Brayden Tang <brayden.tang1@gmail.com>
+* Robert Pimentel <email>
+* Shiying (Florence) Wang <email>
 
 ## Contributors
 
