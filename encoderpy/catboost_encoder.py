@@ -34,7 +34,7 @@ def catboost_encoder(X_train, X_test, y, n_permutations, cat_columns, prior, obj
         The test set, with the categorical columns specified by the argument cat_columns
         replaced by the learned encodings from the training set.
         
-  Examples:
+  Examples
   -------
   >>> encodings = catboost_encoder(
   my_train, 
@@ -49,5 +49,5 @@ def catboost_encoder(X_train, X_test, y, n_permutations, cat_columns, prior, obj
 
   """
   
-  return [train_processed, test_processed
+  return [train_processed, test_processed]
   

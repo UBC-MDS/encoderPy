@@ -12,6 +12,14 @@ encoderpy.catboost\_encoder module
    :undoc-members:
    :show-inheritance:
 
+encoderpy.conjugate\_encoder module
+-----------------------------------
+
+.. automodule:: encoderpy.conjugate_encoder
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 encoderpy.encoderpy module
 --------------------------
 
