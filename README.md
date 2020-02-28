@@ -24,7 +24,7 @@ This package contains four functions, each that accept two pandas `DataFrames` r
 2. Frequency encoder: calculates encodings based off the observed frequency of each category in the training set.
 3. Target/Label encoder: calculates encodings by computing the average observed response per each category.
 4. One-hot encoder: the standard one-hot encoding of categorical features, which will create K-1 columns of 0/1 indicator variables.
-5. Conjugate encoder: calculates encodings based off Bayes rule using conjugate priors and the mean of the posterior distribution (will do this if time permits out of curiosity). 
+5. Conjugate encoder: calculates encodings based off Bayes rule using conjugate priors and the mean of the posterior distribution (will do this if time permits out of curiosity). The original paper of this method can be found [here.](https://arxiv.org/pdf/1904.13001.pdf)
 
 ### Where encoderPy Fits in The Python Ecosystem
 
