@@ -36,6 +36,14 @@ encoderpy.frequency\_encoder module
    :undoc-members:
    :show-inheritance:
 
+encoderpy.onehot\_encoder module
+--------------------------------
+
+.. automodule:: encoderpy.onehot_encoder
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 encoderpy.target\_encoder module
 --------------------------------
 
