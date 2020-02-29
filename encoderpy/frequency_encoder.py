@@ -1,4 +1,4 @@
-def frequency_encoder(X_train, X_test, y, cat_columns):
+def frequency_encoder(X_train, X_test, cat_columns):
   """This function encodes categorical variables using the frequencies of each category.
   
   Parameters
@@ -7,13 +7,9 @@ def frequency_encoder(X_train, X_test, y, cat_columns):
           A pandas dataframe representing the training data set containing some categorical features/columns.
   X_test : pd.DataFrame
           A pandas dataframe representing the test set, containing some set of categorical features/columns.
-  y : pd.Series
-          A pandas series representing the target variable. If the objective is "binary", then this
-          series should only contain two unique values. 
   cat_columns : list
           The names of the categorical features in X_train and/or X_test.
   
-          
   Returns
   -------
   train_processed : pd.DataFrame
@@ -28,7 +24,6 @@ def frequency_encoder(X_train, X_test, y, cat_columns):
   >>> encodings = frequency_encoder(
   my_train, 
   my_test, 
-  my_train['y'], 
   cat_columns = ['foo'])
   
   >>> train_new = encodings[0]

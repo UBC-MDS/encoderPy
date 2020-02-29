@@ -28,6 +28,14 @@ encoderpy.encoderpy module
    :undoc-members:
    :show-inheritance:
 
+encoderpy.frequency\_encoder module
+-----------------------------------
+
+.. automodule:: encoderpy.frequency_encoder
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 encoderpy.target\_encoder module
 --------------------------------
 
