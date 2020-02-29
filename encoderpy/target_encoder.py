@@ -31,7 +31,7 @@ def target_encoder(X_train, X_test, y, cat_columns, prior = 0.5, min_samples = 1
         The test set, with the categorical columns specified by the argument cat_columns
         replaced by the learned encodings from the training set.
         
-  Examples:
+  Examples
   -------
   >>> encodings = target_encoder(
   my_train, 
