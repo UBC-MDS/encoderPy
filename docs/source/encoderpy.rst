@@ -28,6 +28,14 @@ encoderpy.encoderpy module
    :undoc-members:
    :show-inheritance:
 
+encoderpy.target\_encoder module
+--------------------------------
+
+.. automodule:: encoderpy.target_encoder
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 Module contents
 ---------------
