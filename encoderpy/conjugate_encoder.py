@@ -21,7 +21,7 @@ def conjugate_encoder(X_train, X_test, y, cat_columns, prior_params, objective =
           numbers and be greater than 0.
   objective : str
           A string, either "regression" or "binary" specifying the problem. Default is regression.
-          For regression, a normal-inverse gamma prior + normal likelihood is assumed. For binary classifcation, a
+          For regression, a normal-inverse gamma prior + normal likelihood is assumed. For binary classification, a
           beta prior with binomial likelihood is assumed.
           
   Returns
