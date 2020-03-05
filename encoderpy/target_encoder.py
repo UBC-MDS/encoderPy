@@ -1,4 +1,4 @@
-def target_encoder(X_train, X_test, y, cat_columns, prior = 0.5, min_samples = 1):
+def target_encoder(X_train, X_test, y, cat_columns, prior = 0.5):
         """
         This function encodes categorical variables with average target values for each category.
 
@@ -18,10 +18,7 @@ def target_encoder(X_train, X_test, y, cat_columns, prior = 0.5, min_samples = 1
                 preventing encodings of 0 for when the training set does not have particular categories observed
                 in the test set. A larger value gives less weight to what is observed in the training set. A value
                 of 0 incorporates no prior information. The default value is 0.5.
-        min_samples: int
-                The minimum samples to calculate mean of targets. If number of the target smaller than min_samples, 
-                the value will be encoded as prior probability. The default value is 1.
-                
+                     
         Returns
         -------
         train_processed : pd.DataFrame
@@ -38,8 +35,7 @@ def target_encoder(X_train, X_test, y, cat_columns, prior = 0.5, min_samples = 1
         my_test, 
         my_train['y'], 
         cat_columns = ['foo'],
-        prior = 0.5, 
-        min_samples = 1)
+        prior = 0.5)
 
         >>> train_new = encodings[0]
         """
