@@ -36,10 +36,15 @@ def frequency_encoder(X_train, X_test, cat_columns, prior = 0.5):
         >>> train_new = encodings[0]
 
         """
-        train_processed = X_train
-        test_processed = X_test
-        # for col in cat_columns :
-        #         encoding_col = X_train.groupby(col).agg(freq = )
+        train_processed = X_train.copy()
+        test_processed = X_test.copy()
+        for col in cat_columns :
+                encoding_col = pd.DataFrame(X_train[col].value_counts(normalize=True)).reset_index()
+                encoding_col = encoding_col.rename(columns = {col : 'freq', 'index': col})
+                encoded_train_col = pd.merge(X_train,encoding_col, on = [col], how = 'left').set_index([X_train.index])
+                train_processed[col] = encoded_train_col['freq']
+                encoded_test_col = pd.merge(X_test,encoding_col, on = [col], how = 'left').set_index([X_test.index])
+                test_processed[col] = encoded_test_col['freq']
   
         return [train_processed, test_processed]
   
