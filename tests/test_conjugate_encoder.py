@@ -48,13 +48,6 @@ test2 = data.query("train_test_3 == 'test'")
 prior_param_reg = {'mu' : 1, 'vega': 3, 'alpha': 2, 'beta': 2}
 prior_param_class = {'alpha': 5, 'beta': 3}
 
-train_encode2, test_encode2 = conjugate_encoder.conjugate_encoder(X_train = train2,
-                                                                  y = train2.target_cont, 
-                                                                  cat_columns= ['feature_cat_chr','feature_cat_num'],
-                                                                  X_test = test2,
-                                                                  prior_params = prior_param_reg, 
-                                                                  objective = 'regression')
-
 def test_check_exception():
     
     #check if the function handles invalid inputs.
