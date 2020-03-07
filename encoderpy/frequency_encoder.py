@@ -24,7 +24,7 @@ def frequency_encoder(X_train, X_test = None, cat_columns, prior = 0.5):
                 replaced by their encodings.
         test_processed : pd.DataFrame
                 The test set, with the categorical columns specified by the argument cat_columns
-                replaced by the learned encodings from the training set.
+                replaced by the learned encodings from the training set (if X_test is provided).
         
         Examples
         -------
@@ -59,7 +59,7 @@ def frequency_encoder(X_train, X_test = None, cat_columns, prior = 0.5):
                         return [train_processed, test_processed]     
         else :
                 test_processed = X_test.copy()
-                
+
                 for col in cat_columns :
                         encoding_col = pd.DataFrame(X_train[col].value_counts(normalize=True)).reset_index()
                         encoding_col = encoding_col.rename(columns = {col : 'freq', 'index': col})
