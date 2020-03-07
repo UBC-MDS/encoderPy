@@ -36,26 +36,38 @@ def frequency_encoder(X_train, X_test = None, cat_columns, prior = 0.5):
         >>> train_new = encodings[0]
 
         """
-        train_processed = X_train.copy()
-        test_processed = X_test.copy()
+
         includes_X_test = (X_test is not None)
-        for col in cat_columns :
-                encoding_col = pd.DataFrame(X_train[col].value_counts(normalize=True)).reset_index()
-                encoding_col = encoding_col.rename(columns = {col : 'freq', 'index': col})
-                if includes_X_test :
+        if includes_X_test :
+                train_processed = X_train.copy()
+                test_processed = X_test.copy()
+
+                for col in cat_columns :
+                        encoding_col = pd.DataFrame(X_train[col].value_counts(normalize=True)).reset_index()
+                        encoding_col = encoding_col.rename(columns = {col : 'freq', 'index': col})
+
+                        # encode train data
                         encoded_train_col = pd.merge(X_train,encoding_col, on = [col], how = 'left').set_index([X_train.index])[['freq']]
                         train_processed[col] = encoded_train_col['freq']
-
+                        
+                        # encode test data
                         encoded_test_col = pd.merge(X_test,encoding_col, on = [col], how = 'left').set_index([X_test.index])[['freq']]
                         # If a category existed in the train data that did not esixt in the test data make the frequency 0
                         encoded_test_col = encoded_test_col.fillna(0)
                         test_processed[col] = encoded_test_col['freq']
 
-                        return [train_processed, test_processed]
-                else :
+                        return [train_processed, test_processed]     
+        else :
+                test_processed = X_test.copy()
+                
+                for col in cat_columns :
+                        encoding_col = pd.DataFrame(X_train[col].value_counts(normalize=True)).reset_index()
+                        encoding_col = encoding_col.rename(columns = {col : 'freq', 'index': col})
+
+                        # encode train data
                         encoded_train_col = pd.merge(X_train,encoding_col, on = [col], how = 'left').set_index([X_train.index])[['freq']]
                         train_processed[col] = encoded_train_col['freq']
-
+                        
                         return train_processed
 
   
