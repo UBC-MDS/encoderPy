@@ -29,11 +29,11 @@ def target_encoder(X_train, y, cat_columns, X_test = None, prior = 0.5, objectiv
         Returns
         -------
         train_processed : pd.DataFrame
-        The training set, with the categorical columns specified by the argument cat_columns
-        replaced by their encodings.
+                The training set, with the categorical columns specified by the argument cat_columns
+                replaced by their encodings.
         test_processed : pd.DataFrame
-        The test set, with the categorical columns specified by the argument cat_columns
-        replaced by the learned encodings from the training set.
+                The test set, with the categorical columns specified by the argument cat_columns
+                replaced by the learned encodings from the training set.
 
         Examples
         -------
