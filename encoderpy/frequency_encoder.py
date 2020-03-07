@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-def frequency_encoder(X_train, X_test, cat_columns, prior = 0.5):
+def frequency_encoder(X_train, X_test = None, cat_columns, prior = 0.5):
         """This function encodes categorical variables using the frequencies of each category.
   
         Parameters
