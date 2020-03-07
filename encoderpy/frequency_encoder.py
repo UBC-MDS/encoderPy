@@ -9,7 +9,7 @@ def frequency_encoder(X_train, X_test = None, cat_columns, prior = 0.5):
         X_train : pd.DataFrame
                 A pandas dataframe representing the training data set containing some categorical features/columns.
         X_test : pd.DataFrame
-                A pandas dataframe representing the test set, containing some set of categorical features/columns.
+                An optional pandas dataframe representing the test set, containing some set of categorical features/columns. Default is None.
         cat_columns : list
                 The names of the categorical features in X_train and/or X_test.
         prior : float
