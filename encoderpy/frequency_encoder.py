@@ -1,34 +1,45 @@
-def frequency_encoder(X_train, X_test, cat_columns):
-  """This function encodes categorical variables using the frequencies of each category.
-  
-  Parameters
-  ----------
-  X_train : pd.DataFrame
-          A pandas dataframe representing the training data set containing some categorical features/columns.
-  X_test : pd.DataFrame
-          A pandas dataframe representing the test set, containing some set of categorical features/columns.
-  cat_columns : list
-          The names of the categorical features in X_train and/or X_test.
-  
-  Returns
-  -------
-  train_processed : pd.DataFrame
-        The training set, with the categorical columns specified by the argument cat_columns
-        replaced by their encodings.
-  test_processed : pd.DataFrame
-        The test set, with the categorical columns specified by the argument cat_columns
-        replaced by the learned encodings from the training set.
-        
-  Examples
-  -------
-  >>> encodings = frequency_encoder(
-  my_train, 
-  my_test, 
-  cat_columns = ['foo'])
-  
-  >>> train_new = encodings[0]
+import pandas as pd
+import numpy as np
 
-  """
+def frequency_encoder(X_train, X_test, cat_columns, prior = 0.5):
+        """This function encodes categorical variables using the frequencies of each category.
   
-  return [train_processed, test_processed]
+        Parameters
+        ----------
+        X_train : pd.DataFrame
+                A pandas dataframe representing the training data set containing some categorical features/columns.
+        X_test : pd.DataFrame
+                A pandas dataframe representing the test set, containing some set of categorical features/columns.
+        cat_columns : list
+                The names of the categorical features in X_train and/or X_test.
+        prior : float
+                A number in [0, inf] that acts as pseudo counts when calculating the encodings. Useful for
+                preventing encodings of 0 for when the training set does not have particular categories observed
+                in the test set. A larger value gives less weight to what is observed in the training set. A value
+                of 0 incorporates no prior information. The default value is 0.5.
+        Returns
+        -------
+        train_processed : pd.DataFrame
+                The training set, with the categorical columns specified by the argument cat_columns
+                replaced by their encodings.
+        test_processed : pd.DataFrame
+                The test set, with the categorical columns specified by the argument cat_columns
+                replaced by the learned encodings from the training set.
+        
+        Examples
+        -------
+        >>> encodings = frequency_encoder(
+        my_train, 
+        my_test, 
+        cat_columns = ['foo'])
+  
+        >>> train_new = encodings[0]
+
+        """
+        train_processed = X_train
+        test_processed = X_test
+        # for col in cat_columns :
+        #         encoding_col = X_train.groupby(col).agg(freq = )
+  
+        return [train_processed, test_processed]
   
