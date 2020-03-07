@@ -1,4 +1,4 @@
-def target_encoder(X_train, X_test, y, cat_columns, prior = 0.5):
+def target_encoder(X_train, X_test, y, cat_columns, prior = 0.5, objective = 'regression'):
         """
         This function encodes categorical variables with average target values for each category.
 
@@ -18,6 +18,8 @@ def target_encoder(X_train, X_test, y, cat_columns, prior = 0.5):
                 preventing encodings of 0 for when the training set does not have particular categories observed
                 in the test set. A larger value gives less weight to what is observed in the training set. A value
                 of 0 incorporates no prior information. The default value is 0.5.
+        objective : string
+                Either "regression" or "binary" specifying the problem. Default is regression.
                      
         Returns
         -------
@@ -39,17 +41,37 @@ def target_encoder(X_train, X_test, y, cat_columns, prior = 0.5):
 
         >>> train_new = encodings[0]
         """
-        # check if input is valid 
+        # check input of objective
+        if (objective != 'regression') & (objective != 'binary'): 
+                raise Exception("objective must be regression or binary.")
+        # check if cat_columns is a list
         if isinstance(cat_columns, list) == False:
                 raise Exception("Type of cat_columns must be a list")
+        # check if prior is a numeric value
         if (isinstance(prior, float) | isinstance(prior, int)) == False:
                 raise Exception("Type of prior must be a numeric value")
-        if (isinstance(X_train, pd.DataFrame) & isinstance(X_test, pd.DataFrame)) == False:
-                raise Exception("Type of X_train and X_test must be pd.Dataframe")
+        # check if y is a pandas series
         if isinstance(y, pd.Series) == False:
                 raise Exception("Type of y must be pd.Series")
+        #
+        if (isinstance(X_train, pd.DataFrame) & isinstance(X_test, pd.DataFrame)) == False:
+                raise Exception("Type of X_train and X_test must be pd.Dataframe")
+        # 
         if (set(cat_columns).issubset(X_train.columns) & set(cat_columns).issubset(X_test.columns)) == False:
                 raise Exception("X_train and X_test must contain cat_columns")
+        
+        #check if target variable is numeric for regression objective
+        if objective == 'regression':
+                if (y.dtype != 'int64') & (y.dtype != 'float64'):
+                        raise Exception("The target variable must be numeric.")
+        # for binary objective
+        else:
+                # check if target is binary
+                if y.nunique() != 2:
+                        raise Exception("The target variable must be binary")
+                # encode target to 0 or 1
+                if (y.dtype != 'int64') & (y.dtype != 'float64'):
+                        y = y.replace({y.unique()[0] : 0, y.unique()[1] : 1})
 
         # make copy of original data
         train_processed = X_train.copy()
