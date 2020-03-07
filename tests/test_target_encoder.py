@@ -21,37 +21,42 @@ target_cha = train1.target_bin.replace({train1.target_bin.unique()[0] : "a", tra
 
 def check_exception():
     #check if the function handles invalid inputs.
+
+    # check input of objective
     with pytest.raises(Exception):
         target_encoder.target_encoder(X_train = train1, y = train1.target_bin, cat_columns= ['feature_cat_chr','feature_cat_num'],
                        X_test = test1, prior = 0.5, objective = 'something')
-        
+    # check if cat_columns is a list    
     with pytest.raises(Exception):
         target_encoder.target_encoder(X_train = train1, y = train1.target_bin, cat_columns= "not list")
-        
+    # check if prior is a numeric value   
     with pytest.raises(Exception):
         target_encoder.target_encoder(X_train = train1, y = train1.target_bin, cat_columns= ['feature_cat_chr','feature_cat_num'],
                        prior = 'string')
-        
+    # check if y is a pandas series    
     with pytest.raises(Exception):
         target_encoder.target_encoder(X_train = train1, y = [1,2], cat_columns= ['feature_cat_chr','feature_cat_num'])
-        
+    # check if length y equals to length X_train      
     with pytest.raises(Exception):
         target_encoder.target_encoder(X_train = train1, y = pd.Series([1,2]), cat_columns= ['feature_cat_chr','feature_cat_num'])
-        
+    # check if X_train is pandas dataframe
     with pytest.raises(Exception):
-        target_encoder.target_encoder(X_train = [1,2], y = train1.target_bin, cat_columns= ['something'])
-        
+        target_encoder.target_encoder(X_train = [1,2], y = train1.target_bin, cat_columns= ['feature_cat_chr','feature_cat_num'])
+    # check if X_train contains cat_columns  
+    with pytest.raises(Exception):
+        target_encoder.target_encoder(X_train = train1, y = train1.target_bin, cat_columns= ['something'])
+    #check if target variable is numeric for regression objective    
     with pytest.raises(Exception):
         target_encoder.target_encoder(X_train = train1, y = target_cha, cat_columns= ['feature_cat_chr','feature_cat_num'])
-        
+    # check if target is binary
     with pytest.raises(Exception):
         target_encoder.target_encoder(X_train = train1, y = train1.target_cont, cat_columns= ['feature_cat_chr','feature_cat_num'],
                       objective = 'binary')
-        
+    # check if X_test is pandas dataframe    
     with pytest.raises(Exception):
         target_encoder.target_encoder(X_train = train1, y = train1.target_cont, cat_columns= ['feature_cat_chr','feature_cat_num'],
                       X_test = [1,2])
-    
+    # check if X_test contains cat_columns
     with pytest.raises(Exception):
         target_encoder.target_encoder(X_train = train1, y = train1.target_cont, cat_columns= ['something'],
                       X_test = test1)   
