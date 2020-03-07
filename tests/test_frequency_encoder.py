@@ -12,7 +12,7 @@ train3 = data.query("train_test_3 == 'train'")
 test3 = data.query("train_test_3 == 'test'")
 
 train_encode1, test_encode1 = frequency_encoder.frequency_encoder(X_train = train1, X_test = test1, cat_columns= ['feature_cat_chr','feature_cat_num'])
-train_encode2 = frequency_encoder.frequency_encoder(X_train = train1, cat_columns= ['feature_cat_chr','feature_cat_num'])
+train_encode2 = frequency_encoder.frequency_encoder(X_train = train1, X_test = None, cat_columns= ['feature_cat_chr','feature_cat_num'])
 train_encode3, test_encode3 = frequency_encoder.frequency_encoder(X_train = train3, X_test = test3, cat_columns= ['feature_cat_chr','feature_cat_num'])
 
 def test_output():
