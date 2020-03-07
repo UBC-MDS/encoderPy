@@ -100,7 +100,7 @@ def conjugate_encoder(X_train, y, cat_columns, prior_params, X_test = None, obje
           
           mu_post = (vega * mu + n * conditionals['encoded_mean']) / (vega + n)
           alpha_post = alpha + n/2
-          beta_post = beta + 0.5 * n * conditionals['encoded_var'] + (n * vega) / (vega + n) * (((conditionals['encoded_mean'] - mu)**2) / 2)
+          beta_post = beta + 0.5 * n * conditionals['encoded_var'] + ((n * vega) / (vega + n)) * (((conditionals['encoded_mean'] - mu)**2) / 2)
           
           all_encodings = pd.concat([mu_post, beta_post / (alpha_post - 1)], axis=1).reset_index() 
           all_encodings.columns = [col, 'encoded_mean' + "_" + col, 'encoded_var' + "_" + col]

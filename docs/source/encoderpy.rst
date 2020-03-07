@@ -4,14 +4,6 @@ encoderpy package
 Submodules
 ----------
 
-encoderpy.catboost\_encoder module
-----------------------------------
-
-.. automodule:: encoderpy.catboost_encoder
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 encoderpy.conjugate\_encoder module
 -----------------------------------
 
