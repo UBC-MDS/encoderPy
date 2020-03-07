@@ -35,7 +35,7 @@ def conjugate_encoder(X_train, y, cat_columns, prior_params, X_test = None, obje
         is two dimensional. For binary classification, the encodings will return 1 column.
   test_processed : pd.DataFrame
         The test set, with the categorical columns specified by the argument cat_columns
-        replaced by the learned encodings from the training set.
+        replaced by the learned encodings from the training set. This is returned if X_test is not None.
         
   Examples
   -------
@@ -53,14 +53,20 @@ def conjugate_encoder(X_train, y, cat_columns, prior_params, X_test = None, obje
   
   if objective not in ['regression', 'binary']:
       raise Exception("Objective must be either regression or binary.")
-  if (set(cat_columns).issubset(X_train.columns) & set(cat_columns).issubset(X_test.columns)) == False:
-      raise Exception("X_train and X_test must contain cat_columns.")
+  if (set(cat_columns).issubset(X_train.columns)) == False:
+      raise Exception("X_train must contain cat_columns.")
   if isinstance(cat_columns, list) == False:
       raise Exception("Type of cat_columns must be a list.")
-  if (isinstance(X_train, pd.DataFrame) & isinstance(X_test, pd.DataFrame)) == False:
-      raise Exception("Type of X_train and X_test must be pd.Dataframe.")
+  if (isinstance(X_train, pd.DataFrame)) == False:
+      raise Exception("Type of X_train must be pd.Dataframe.")
   if isinstance(y, pd.Series) == False:
       raise Exception("Type of y must be pd.Series.")
+
+  if X_test is not None:
+      if (set(cat_columns).issubset(X_test.columns)) == False:
+          raise Exception("X_test must contain cat_columns.")
+      if (isinstance(X_test, pd.DataFrame)) == False:
+          raise Exception("X_test must be pd.Dataframe.")
       
   if objective == "regression":
       if set(prior_params.keys()).issubset(set(["mu", "alpha", "beta", "vega"])) == False:
@@ -75,9 +81,14 @@ def conjugate_encoder(X_train, y, cat_columns, prior_params, X_test = None, obje
       vega = prior_params['vega']
       beta = prior_params['beta']
       n = X_train.shape[0]
+      
+      if n == 1:
+          raise Exception("Cannot fit encodings with only one data point.")
    
       train_processed = X_train.copy()
-      test_processed = X_test.copy()
+      
+      if X_test is not None:
+          test_processed = X_test.copy()
       
       for col in cat_columns:
           
@@ -91,15 +102,12 @@ def conjugate_encoder(X_train, y, cat_columns, prior_params, X_test = None, obje
           alpha_post = alpha + n/2
           beta_post = beta + 0.5 * n * conditionals['encoded_var'] + (n * vega) / (vega + n) * (((conditionals['encoded_mean'] - mu)**2) / 2)
           
-          if alpha_post <= 1:
-              raise Exception("Posterior alpha is less than or equal to 1. Increase the prior value on alpha to avoid this error.")
-              
           all_encodings = pd.concat([mu_post, beta_post / (alpha_post - 1)], axis=1).reset_index() 
           all_encodings.columns = [col, 'encoded_mean' + "_" + col, 'encoded_var' + "_" + col]
                     
           train_processed = train_processed.merge(all_encodings, on=col, how="left")
           
-          if isinstance(X_test, pd.DataFrame):
+          if X_test is not None:
               prior_var = beta / (alpha - 1)
               test_processed = test_processed.merge(all_encodings, on=col, how="left")
               test_processed['encoded_mean' + "_" + col] = test_processed['encoded_mean' + "_" + col].fillna(mu)
@@ -110,7 +118,7 @@ def conjugate_encoder(X_train, y, cat_columns, prior_params, X_test = None, obje
                  
   else:
       if set(prior_params.keys()).issubset(set(["alpha", "beta"])) == False:
-          raise Exception("Invalid prior specification. The dictionary must include two keys for binary classification.")
+          raise Exception("Invalid prior specification. The dictionary must include keys alpha, beta for binary classification.")
           
       if prior_params['alpha'] <= 0 or prior_params['beta'] <= 0:
           raise Exception("Invalid prior specification. alpha and beta should all be positive.")
@@ -128,7 +136,9 @@ def conjugate_encoder(X_train, y, cat_columns, prior_params, X_test = None, obje
       n = X_train.shape[0]
    
       train_processed = X_train.copy()
-      test_processed = X_test.copy()
+      
+      if X_test is not None:
+          test_processed = X_test.copy()
       
       for col in cat_columns:
           
@@ -141,11 +151,11 @@ def conjugate_encoder(X_train, y, cat_columns, prior_params, X_test = None, obje
           
           train_processed.loc[:,col] = train_processed[col].map(posterior_mean)
  
-          if isinstance(X_test, pd.DataFrame):
+          if X_test is not None:
               prior_mean = alpha/(alpha + beta)
               test_processed.loc[:,col] = test_processed[col].map(posterior_mean)
               test_processed.loc[:,col] = test_processed[col].fillna(prior_mean) 
 
   
-  return [train_processed, test_processed]
+  return [train_processed, test_processed] if X_test is not None else [train_processed]
   
