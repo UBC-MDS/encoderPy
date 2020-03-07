@@ -1,6 +1,6 @@
 ## encoderPy 
 
-![](https://github.com/UBC-MDS/encoderPy/workflows/build/badge.svg) [![codecov](https://codecov.io/gh/UBC-MDS/encoderPy/branch/master/graph/badge.svg)](https://codecov.io/gh/braydentang1/encoderpy) ![Release](https://github.com/UBC-MDS/encoderpy/workflows/Release/badge.svg)
+![](https://github.com/UBC-MDS/encoderPy/workflows/build/badge.svg) [![codecov](https://codecov.io/gh/UBC-MDS/encoderPy/branch/master/graph/badge.svg)](https://codecov.io/gh/braydentang1/encoderpy) ![Release](https://github.com/UBC-MDS        /encoderpy/workflows/Release/badge.svg)
 
 [![Documentation Status](https://readthedocs.org/projects/encoderpy/badge/?version=latest)](https://encoderpy.readthedocs.io/en/latest/?badge=latest)
 
