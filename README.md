@@ -1,6 +1,6 @@
 ## encoderPy 
 
-![](https://github.com/braydentang1/encoderpy/workflows/build/badge.svg) [![codecov](https://codecov.io/gh/braydentang1/encoderpy/branch/master/graph/badge.svg)](https://codecov.io/gh/braydentang1/encoderpy) ![Release](https://github.com/braydentang1/encoderpy/workflows/Release/badge.svg)
+![](https://github.com/UBC-MDS/encoderPy/workflows/build/badge.svg) [![codecov](https://codecov.io/gh/UBC-MDS/encoderPy/branch/master/graph/badge.svg)](https://codecov.io/gh/braydentang1/encoderpy) ![Release](https://github.com/UBC-MDS/encoderpy/workflows/Release/badge.svg)
 
 [![Documentation Status](https://readthedocs.org/projects/encoderpy/badge/?version=latest)](https://encoderpy.readthedocs.io/en/latest/?badge=latest)
 
@@ -31,11 +31,52 @@ There is one notable package in Python that has a variety of different methods f
 
 ### Dependencies
 
-- TODO
+- pandas 
+- numpy
+- pytest
 
 ### Usage
 
-- TODO
+This package can allow one to fit many different kinds of encodings for categorical features easily. For example, one can fit a conjugate encoding of some categorical variables by:
+
+```python
+from encoderpy import conjugate_encoder, target_encoder
+import pandas as pd
+
+my_data = pd.DataFrame(
+{'fruit': ['Apple', 'Orange', 'Apple', 'Apple', 'Banana'],
+ 'color': ['Red', 'Blue', 'Orange', 'Red', 'Red'],
+ 'target': [1, 0, 1, 1, 1]})
+ 
+conjugate_encoder.conjugate_encoder(
+  X_train=my_data, 
+  y=my_data['target'], 
+  cat_columns = ['fruit', 'color'],
+  prior_params = {'alpha': 3, 'beta': 5},
+  objective = "binary")
+ 
+```
+
+This package can also fit regression data sets, and automatically join the learned encodings on a held out test set if the user wants to:
+
+```python
+from encoderpy import target_encoder
+import pandas as pd
+
+my_data = pd.DataFrame(
+{'fruit': ['Apple', 'Orange', 'Apple', 'Apple', 'Banana', 'Orange', 'Apple'],
+ 'color': ['Red', 'Blue', 'Orange', 'Red', 'Red', 'Blue', 'Green'],
+ 'target': [3.5, 10, 10.912, 3.14159, 10, 15, 1000]})
+ 
+target_encoder.target_encoder(
+  X_train=my_data[2:7, ], 
+  y=my_data['target'], 
+  cat_columns = ['fruit', 'color'],
+  X_test = my_data.iloc[0:2, ],
+  prior = 0.8,
+  objective = "regression")
+ 
+```
 
 ### Documentation
 The official documentation is hosted on Read the Docs: <https://encoderpy.readthedocs.io/en/latest/>
