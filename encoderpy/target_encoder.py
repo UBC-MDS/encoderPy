@@ -10,8 +10,7 @@ def target_encoder(X_train, y, cat_columns, X_test = None, prior = 0.5, objectiv
         ----------
         X_train : pd.DataFrame
                 A pandas dataframe representing the training data set containing some categorical features/columns.
-        X_test : pd.DataFrame
-                A pandas dataframe representing the test set, containing some set of categorical features/columns.
+
         y : pd.Series
                 A pandas series representing the target variable. If the objective is "binary", then this
                 series should only contain two unique values.
@@ -22,6 +21,8 @@ def target_encoder(X_train, y, cat_columns, X_test = None, prior = 0.5, objectiv
                 preventing encodings of 0 for when the training set does not have particular categories observed
                 in the test set. A larger value gives less weight to what is observed in the training set. A value
                 of 0 incorporates no prior information. The default value is 0.5.
+        X_test : pd.DataFrame
+                A pandas dataframe representing the test set, containing some set of categorical features/columns. default None.
         objective : string
                 Either "regression" or "binary" specifying the problem. Default is regression.
                      
@@ -38,10 +39,11 @@ def target_encoder(X_train, y, cat_columns, X_test = None, prior = 0.5, objectiv
         -------
         >>> encodings = target_encoder(
         my_train, 
-        my_test, 
         my_train['y'], 
         cat_columns = ['foo'],
-        prior = 0.5)
+        prior = 0.5,
+        my_test, 
+        'regression')
 
         >>> train_new = encodings[0]
         """
