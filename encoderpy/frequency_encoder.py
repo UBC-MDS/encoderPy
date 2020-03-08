@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-def frequency_encoder(X_train, X_test = None, cat_columns, prior = 0.5):
+def frequency_encoder(X_train, cat_columns, X_test = None, prior = 0.5):
         """This function encodes categorical variables using the frequencies of each category.
   
         Parameters
@@ -38,7 +38,7 @@ def frequency_encoder(X_train, X_test = None, cat_columns, prior = 0.5):
         """
 
         includes_X_test = (X_test is not None)
-        if includes_X_test :
+        if includes_X_test:
                 train_processed = X_train.copy()
                 test_processed = X_test.copy()
 
@@ -57,10 +57,10 @@ def frequency_encoder(X_train, X_test = None, cat_columns, prior = 0.5):
                         test_processed[col] = encoded_test_col['freq']
 
                         return [train_processed, test_processed]     
-        else :
-                test_processed = X_test.copy()
+        else:
+                train_processed = X_train.copy()
 
-                for col in cat_columns :
+                for col in cat_columns:
                         encoding_col = pd.DataFrame(X_train[col].value_counts(normalize=True)).reset_index()
                         encoding_col = encoding_col.rename(columns = {col : 'freq', 'index': col})
 
