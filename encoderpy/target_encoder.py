@@ -31,7 +31,7 @@ def target_encoder(X_train, y, cat_columns, X_test = None, prior = 0.5, objectiv
         train_processed : pd.DataFrame
                 The training set, with the categorical columns specified by the argument cat_columns
                 replaced by their encodings.
-        test_processed : pd.DataFrame
+        test_processed : pd.DataFrame (optional)
                 The test set, with the categorical columns specified by the argument cat_columns
                 replaced by the learned encodings from the training set.
 
@@ -82,7 +82,7 @@ def target_encoder(X_train, y, cat_columns, X_test = None, prior = 0.5, objectiv
                 # encode target to 0 or 1
                 if (y.dtype != 'int64') & (y.dtype != 'float64'):
                         y_new = y.replace({y.unique()[0] : 0, y.unique()[1] : 1})
-
+        # Check when X_test is none
         if X_test is None:
                 train_processed = X_train.copy()
                 for col in cat_columns:
@@ -94,8 +94,8 @@ def target_encoder(X_train, y, cat_columns, X_test = None, prior = 0.5, objectiv
                         # encode categorical columns for training dataset
                         train_processed.loc[:,col] = train_processed[col].map(search_table)
                 
-                return train_processed
-        
+                return [train_processed]
+        # Check when X_test is not none 
         else:
                 # check if X_test is pandas dataframe
                 if isinstance(X_test, pd.DataFrame) == False:

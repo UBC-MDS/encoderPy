@@ -74,8 +74,8 @@ def test_output():
     assert train_encode1.shape == train1.shape, "The shape of training dataset is wrong"
     assert test_encode1.shape == test1.shape, "The shape of testing datset is wrong"
     #check when X_test is none
-    assert target_encoder.target_encoder(X_train = train1, y = target_cha,cat_columns= ['feature_cat_chr','feature_cat_num'], 
-                objective = 'binary').shape == train1.shape
+    assert len(target_encoder.target_encoder(X_train = train1, y = target_cha,cat_columns= ['feature_cat_chr','feature_cat_num'], 
+                objective = 'binary')) == 1
 
 test_output()
     
