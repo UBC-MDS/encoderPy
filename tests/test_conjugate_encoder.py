@@ -189,8 +189,8 @@ def test_check_regression():
                                                 'vega': 10,
                                                 'alpha': 0.000000001,
                                                 'beta': 2
-                                                },
-                                            objective='regression')
+        },
+            objective='regression')
 
     train_encode1, test_encode1 = conjugate_encoder.conjugate_encoder(
         X_train=train1,
