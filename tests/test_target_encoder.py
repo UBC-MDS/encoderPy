@@ -1,6 +1,5 @@
 from encoderpy import target_encoder
 import pandas as pd
-import numpy as np
 import pytest
 
 data = pd.read_csv("data/testing_data.csv")
