@@ -32,7 +32,7 @@ def test_output():
     # test value
     assert train_encode1.feature_cat_chr.iloc[0] == 0.35, \
         'The encoded value for training dataset is wrong'
-    assert np.isnan(test_encode3['feature_cat_chr'].iloc[0]) is False, \
+    assert test_encode3['feature_cat_chr'].iloc[0] != np.nan, \
         'The encoded value of an unseen class in test dataset is wrong'
     # check shape
     assert train_encode1.shape == train1.shape, \

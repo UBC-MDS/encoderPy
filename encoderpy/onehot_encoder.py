@@ -35,4 +35,6 @@ def onehot_encoder(X_train, X_test, cat_columns):
 
     """
 
+    train_processed = X_train
+    test_processed = X_test
     return [train_processed, test_processed]

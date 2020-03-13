@@ -1,6 +1,5 @@
 from encoderpy import target_encoder
 import pandas as pd
-import numpy as np
 import pytest
 
 data = pd.read_csv("data/testing_data.csv")
@@ -121,7 +120,7 @@ def test_output():
     # test value
     assert train_encode1.feature_cat_chr.iloc[0] == 0.43, \
         'The encoded value for training dataset is wrong'
-    assert np.isclose(test_encode2['feature_cat_chr'].iloc[0], 0.5) is True, \
+    assert test_encode2['feature_cat_chr'].iloc[0] == 0.5, \
         'The encoded value for unseen test dataset is wrong'
 
     # check shape
