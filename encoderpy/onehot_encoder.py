@@ -1,3 +1,8 @@
+# load required libraries
+import pandas as pd
+import numpy as np
+
+
 def onehot_encoder(X_train, X_test, cat_columns):
     """
     This function encodes categorical variables using the popular onehot method for each category.
@@ -20,8 +25,8 @@ def onehot_encoder(X_train, X_test, cat_columns):
     X_test : pd.DataFrame
           A pandas dataframe representing the test set, containing some set of categorical features/columns.
     cat_columns : list
-          The names of the categorical features required to encode.
-
+          The names of the categorical features required to encode. 
+          
     Returns
     -------
     train_processed : pd.DataFrame
@@ -70,7 +75,7 @@ def onehot_encoder(X_train, X_test, cat_columns):
                 df.insert(df.shape[1], "values", 1.0)
                 OH_df = df.pivot(values = "values", columns = i).fillna(0)
                 for j in OH_df.columns:
-                    OH_df.rename({j: i +'_'+ j}, axis=1, inplace=True)  # Rename Columns
+                    OH_df.rename({j: i +'_'+ str(j)}, axis=1, inplace=True)  # Rename Columns
                 results = pd.concat([results, OH_df], axis = 1) # Add OH converted columns to results
 
             else:
@@ -101,7 +106,7 @@ def onehot_encoder(X_train, X_test, cat_columns):
                 df.insert(df.shape[1], "values", 1.0)
                 OH_df = df.pivot(values = "values", columns = i).fillna(0)
                 for j in OH_df.columns:
-                    OH_df.rename({j: i +'_'+ j}, axis=1, inplace=True)  # Rename Columns
+                    OH_df.rename({j: i +'_'+ str(j)}, axis=1, inplace=True)  # Rename Columns
 
                 results = pd.concat([results, OH_df], axis = 1) # Add OH converted columns to results
 
@@ -117,7 +122,3 @@ def onehot_encoder(X_train, X_test, cat_columns):
     
     
     
-    
-    
-
-  
