@@ -169,16 +169,15 @@ my_encodings[1].head()
 
 Observe that the encoder function now returns a list with two tibbles labelled `train` and `test`. The two tibbles returned contain the preprocessed `X_train` and `X_test` `DataFrames`, respectively.
 
-Note that when using `target_encoder` that if there are categories that do not appear in the training set but do appear in the test set, these categories are encoded with the group mean (see below) $\bar x$ of the target variable. 
+Note that when using `target_encoder` that if there are categories that do not appear in the training set but do appear in the test set, these categories are encoded with the group mean (see below) of the target variable. 
 
 ### The Prior Parameter
 
 Target encoding is highly susceptible to overfitting since the estimated relationship between the categories in the training set may not necessarily be true in general. 
 
-The `prior` paramter in `target_encoding` allows us to address this issue through the use of Laplace smoothing. The idea of Laplace smoothing is to use a weighted average of the mean of the response variable and the conditional mean per each category. The result is a smoothed estimate that, with a suitable `prior` chosen, is less prone to overfitting. Formally, the learned encoding for the jth category $u_{ij}$ is now:
+The `prior` paramter in `target_encoding` allows us to address this issue through the use of Laplace smoothing. The idea of Laplace smoothing is to use a weighted average of the mean of the response variable and the conditional mean per each category. The result is a smoothed estimate that, with a suitable `prior` chosen, is less prone to overfitting.
 
-$$u_{j} = \frac{\sum_{i=1}^{N} y_{ij} + \text{prior} \times \bar x}{N + \text{prior}},$$
-where $\bar x$ is the mean of the response, and $N$ is the total number of observations belogning to category $j$. Thus, a larger `prior` parameter places more weight on the group mean $\bar x$, whereas a lower prior fully trusts the data.
+A larger `prior` parameter places more weight on the group mean, whereas a lower prior puts more trust in the data.
 
 If one repeats the example above but with a prior of 5:
 
@@ -262,7 +261,7 @@ As one can see, the encodings are fairly similar to that of `target_encoder` but
 
 Note that the Normal-Inverse-gamma distribution is bivariate. In other words, we assumed that the likelihood has unknown mean and unknown variance. 
 
-In general, the Normal-Inverse-gamma distribution is parameterized such that the density is a function of two random variables, $f(x, \sigma^2)$. Thus, the second column shown above, `cyl_encoded_var` is the expected value of $\sigma^2$.
+In general, the Normal-Inverse-gamma distribution is parameterized such that the density is a function of two random variables. Thus, the second column shown above, `cyl_encoded_var` is the expected value of the second random variable.
 
 ### Classification Conjugate Encoding
 

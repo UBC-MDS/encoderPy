@@ -502,13 +502,13 @@ my_encodings[0].head()
 # Output the test set, which is stored in the 1st element
 my_encodings[1].head()</code></pre>
 <p>Observe that the encoder function now returns a list with two tibbles labelled <code>train</code> and <code>test</code>. The two tibbles returned contain the preprocessed <code>X_train</code> and <code>X_test</code> <code>DataFrames</code>, respectively.</p>
-<p>Note that when using <code>target_encoder</code> that if there are categories that do not appear in the training set but do appear in the test set, these categories are encoded with the group mean (see below) <span class="math inline">\(\bar x\)</span> of the target variable.</p>
+<p>Note that when using <code>target_encoder</code> that if there are categories that do not appear in the training set but do appear in the test set, these categories are encoded with the group mean (see below) of the target variable.</p>
 </div>
 <div id="the-prior-parameter" class="section level3">
 <h3>The Prior Parameter</h3>
 <p>Target encoding is highly susceptible to overfitting since the estimated relationship between the categories in the training set may not necessarily be true in general.</p>
-<p>The <code>prior</code> paramter in <code>target_encoding</code> allows us to address this issue through the use of Laplace smoothing. The idea of Laplace smoothing is to use a weighted average of the mean of the response variable and the conditional mean per each category. The result is a smoothed estimate that, with a suitable <code>prior</code> chosen, is less prone to overfitting. Formally, the learned encoding for the jth category <span class="math inline">\(u_{ij}\)</span> is now:</p>
-<p><span class="math display">\[u_{j} = \frac{\sum_{i=1}^{N} y_{ij} + \text{prior} \times \bar x}{N + \text{prior}},\]</span> where <span class="math inline">\(\bar x\)</span> is the mean of the response, and <span class="math inline">\(N\)</span> is the total number of observations belogning to category <span class="math inline">\(j\)</span>. Thus, a larger <code>prior</code> parameter places more weight on the group mean <span class="math inline">\(\bar x\)</span>, whereas a lower prior fully trusts the data.</p>
+<p>The <code>prior</code> paramter in <code>target_encoding</code> allows us to address this issue through the use of Laplace smoothing. The idea of Laplace smoothing is to use a weighted average of the mean of the response variable and the conditional mean per each category. The result is a smoothed estimate that, with a suitable <code>prior</code> chosen, is less prone to overfitting.</p>
+<p>A larger <code>prior</code> parameter places more weight on the group mean, whereas a lower prior puts more trust in the data.</p>
 <p>If one repeats the example above but with a prior of 5:</p>
 <pre class="python"><code>frame_with_encodings = target_encoder.target_encoder(
   X_train=mtcars_train,
@@ -569,7 +569,7 @@ encodings_conjugate = conjugate_encoder.conjugate_encoder(
 .drop_duplicates())</code></pre>
 <p>As one can see, the encodings are fairly similar to that of <code>target_encoder</code> but with more flexibility via. the explicit modelling of the posterior.</p>
 <p>Note that the Normal-Inverse-gamma distribution is bivariate. In other words, we assumed that the likelihood has unknown mean and unknown variance.</p>
-<p>In general, the Normal-Inverse-gamma distribution is parameterized such that the density is a function of two random variables, <span class="math inline">\(f(x, \sigma^2)\)</span>. Thus, the second column shown above, <code>cyl_encoded_var</code> is the expected value of <span class="math inline">\(\sigma^2\)</span>.</p>
+<p>In general, the Normal-Inverse-gamma distribution is parameterized such that the density is a function of two random variables. Thus, the second column shown above, <code>cyl_encoded_var</code> is the expected value of the second random variable.</p>
 <div id="classification-conjugate-encoding" class="section level3">
 <h3>Classification Conjugate Encoding</h3>
 <p>Changing the objective to “binary” in <code>target_encoder</code> makes no difference since it just calculates the mean of y, regardless if it is binary or fully continiuous. However, for <code>conjugate_encoder</code> this is not true since the likelihood used is specifically chosen to handle binary outcomes (a binomial).</p>
