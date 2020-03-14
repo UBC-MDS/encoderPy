@@ -4,6 +4,10 @@ version = "0.1.0"
 description = "A collection of categorical encoders in Python."
 authors = ["braydentang1 <brayden.tang1@gmail.com>"]
 license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/UBC-MDS/encoderPy"
+repository = "https://github.com/UBC-MDS/encoderPy"
+documentation = 'https://encoderpy.readthedocs.io'
 
 [tool.poetry.dependencies]
 python = "^3.7"
