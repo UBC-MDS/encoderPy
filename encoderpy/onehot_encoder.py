@@ -8,14 +8,6 @@ def onehot_encoder(X_train, X_test, cat_columns):
     This function encodes categorical variables using the popular onehot method for each category.
     That is it will convert a category column in the dataframe to dummy binary values like this:
 
-                  X_train = [ index,   num_column ,  cat_column 
-                                 0 ,       1      ,     A      
-                                 1 ,       4      ,     B       ]
-
-        X_train_processed = [ index,   num_column ,  cat_column_A ,  cat_column_B
-                                 0 ,       1      ,        1      ,       0
-                                 1 ,       4      ,        0      ,       1       ]
-
 
 
     Parameters
