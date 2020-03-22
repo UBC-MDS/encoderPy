@@ -56,6 +56,11 @@ def conjugate_encoder(
           cat_columns replaced by the learned encodings from the training set.
           This is returned if X_test is not None.
 
+    References
+    ----------
+    Slakey et al., "Encoding Categorical Variables with Conjugate Bayesian
+    Models for WeWork Lead Scoring Engine", 2019.
+
     Examples
     -------
     >>> encodings = conjugate_encoder(
