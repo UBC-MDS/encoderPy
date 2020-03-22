@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 
-def onehot_encoder(X_train, X_test, cat_columns):
+def onehot_encoder(X_train, cat_columns, X_test=None):
     """
     This function encodes categorical variables using the popular onehot
     method for each category.

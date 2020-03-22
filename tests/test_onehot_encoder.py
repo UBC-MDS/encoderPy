@@ -22,14 +22,15 @@ categories2 = ['treatment', 'age']  # One Categorical and One Interger Data
 
 # Encode data with categories 1
 train_encoded1, test_encoded1 = onehot_encoder.onehot_encoder(
-    X_train,
-    X_test, categories1)
+    X_train=X_train,
+    cat_columns=categories1,
+    X_test=X_test)
 
 # Encode data with categories 2
 train_encoded1, test_encoded1 = onehot_encoder.onehot_encoder(
-    X_train,
-    X_test,
-    categories2)
+    X_train=X_train,
+    cat_columns=categories2,
+    X_test=X_test)
 
 
 def test_output():
