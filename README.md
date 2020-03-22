@@ -39,6 +39,7 @@ There is one notable package in Python that has a variety of different methods f
 - pandas 
 - numpy
 - pytest
+- python-semantic-release (`pip install python-semantic-release`)
 
 ### Usage
 
