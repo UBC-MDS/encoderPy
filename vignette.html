@@ -369,12 +369,9 @@ summary {
 </div>
 
 
-<div id="vignette" class="section level3">
-<h3>Vignette</h3>
 <p>The <strong>encoderpy</strong> package contains functions that allow for more elegant and informative encodings of <a href="https://en.wikipedia.org/wiki/Categorical_variable">categorical features</a>.</p>
 <p><strong>encodepy</strong> has four functions that implement different kinds of encodings for categorical features. Many of these functions take advantage of the response/target variable, y, to create more informative representations. Currently, <strong>encodepy</strong> only supports the tasks of binary classification and regression.</p>
 <p>In most cases, preprocessing of these features is often done using a relatively simple method such as one hot encoding. While this can achieve satisfactory results, often there are better, more <em>sparse</em> representations of these features. These more accurate and sparse representations often come with the drawback of being tedious to implement, but <strong>encodepy</strong> allows one to easily fit such encodings all with a common interface.</p>
-</div>
 <div id="target-encoding" class="section level2">
 <h2>Target Encoding</h2>
 <p>One encoding method that has become popular in recent years is that of target encoding. Target encoding essentially uses the average observed response per each category to derive encodings for each category.</p>
@@ -468,8 +465,8 @@ my_encodings[0].head()
 <div id="the-prior-parameter" class="section level4">
 <h4>The Prior Parameter</h4>
 <p>Target encoding is highly susceptible to overfitting since the estimated relationship between the categories in the training set may not necessarily be true in general.</p>
-<p>The <code>prior</code> paramter in <code>target_encoding</code> allows us to address this issue through the use of Laplace smoothing. The idea of Laplace smoothing is to use a weighted average of the mean of the response variable and the conditional mean per each category. The result is a smoothed estimate that, with a suitable <code>prior</code> chosen, is less prone to overfitting.</p>
-<p>A larger <code>prior</code> parameter places more weight on the group mean, whereas a lower prior puts more trust in the data.</p>
+<p>The <code>prior</code> paramter in <code>target_encoding</code> allows one to address this issue through the use of Laplace smoothing. The idea of Laplace smoothing is to use a weighted average of the mean of the response variable and the conditional mean per each category. The result is a smoothed estimate that, with a suitable <code>prior</code> chosen, is less prone to overfitting. Formally, the learned encoding for the jth category <span class="math inline">\(u_{j}\)</span> is now:</p>
+<p><span class="math display">\[u_{j} = \frac{\sum_{i=1}^{N} y_{ij} + \text{prior} \times \bar x}{N + \text{prior}},\]</span> where <span class="math inline">\(\bar x\)</span> is the mean of the response, and <span class="math inline">\(N\)</span> is the total number of observations belogning to category <span class="math inline">\(j\)</span>. Thus, a larger <code>prior</code> parameter places more weight on the group mean <span class="math inline">\(\bar x\)</span>, whereas a lower prior fully trusts the data.</p>
 <p>If one repeats the example above but with a prior of 5:</p>
 <pre class="python"><code>frame_with_encodings = target_encoder.target_encoder(
   X_train=mtcars_train,
@@ -551,7 +548,7 @@ encodings_conjugate = conjugate_encoder.conjugate_encoder(
 ## 4         13.734266        26.170383         8</code></pre>
 <p>As one can see, the encodings are fairly similar to that of <code>target_encoder</code> but with more flexibility via. the explicit modelling of the posterior.</p>
 <p>Note that the Normal-Inverse-gamma distribution is bivariate. In other words, we assumed that the likelihood has unknown mean and unknown variance.</p>
-<p>In general, the Normal-Inverse-gamma distribution is parameterized such that the density is a function of two random variables x and sigma. Thus, the second column shown above, <code>cyl_encoded_var</code> is the expected value of sigma.</p>
+<p>In general, the Normal-Inverse-gamma distribution is parameterized such that the density is a function of two random variables, <span class="math inline">\(f(x, \sigma^2)\)</span>. Thus, the second column shown above, <code>cyl_encoded_var</code> is the expected value of <span class="math inline">\(\sigma^2\)</span>.</p>
 <div id="classification-conjugate-encoding" class="section level4">
 <h4>Classification Conjugate Encoding</h4>
 <p>Changing the objective to “binary” in <code>target_encoder</code> makes no difference since it just calculates the mean of y, regardless if it is binary or fully continiuous. However, for <code>conjugate_encoder</code> this is not true since the likelihood used is specifically chosen to handle binary outcomes (a binomial).</p>
