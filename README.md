@@ -16,6 +16,10 @@ pip install -i https://test.pypi.org/simple/ encoderpy
 
 This package seeks to provide a convenient set of functions that allow for the encoding of categorical features in potentially more informative ways when compared to other, more standard methods. The user will feed as input a training and testing dataset with categorical features, and the resulting data frames returned will be preprocessed with a specific encoding of the categorical features. At a high level, this package automates the preprocessing of categorical features in ways that exploit particular correlations between the different categories and the data __without__ increasing the dimension of the dataset, like in one hot encoding. Thus, through the more deliberate handling of these categorical features, higher model performance can possibly be achieved. 
 
+## Vignette
+
+For a detailed walkthrough of this package, please view this link [here.](https://htmlpreview.github.io/?https://github.com/UBC-MDS/encoderPy/blob/brayden_conjugate_encoder/vignette.html)
+
 ### Features
  
 This package contains four functions, each that accept two pandas `DataFrames` representing the train and test sets. Depending on the method, the functions will also require additional arguments depending on how the encodings are calculated for each category. For now, we aim to have our package support binary classification and regression problems.

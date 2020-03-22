@@ -378,6 +378,10 @@ summary {
 <h3>Overview</h3>
 <p>This package seeks to provide a convenient set of functions that allow for the encoding of categorical features in potentially more informative ways when compared to other, more standard methods. The user will feed as input a training and testing dataset with categorical features, and the resulting data frames returned will be preprocessed with a specific encoding of the categorical features. At a high level, this package automates the preprocessing of categorical features in ways that exploit particular correlations between the different categories and the data <strong>without</strong> increasing the dimension of the dataset, like in one hot encoding. Thus, through the more deliberate handling of these categorical features, higher model performance can possibly be achieved.</p>
 </div>
+</div>
+<div id="vignette" class="section level2">
+<h2>Vignette</h2>
+<p>For a detailed walkthrough of this package, please view this link <a href="https://htmlpreview.github.io/?https://github.com/UBC-MDS/encoderPy/blob/brayden_conjugate_encoder/vignette.html">here.</a></p>
 <div id="features" class="section level3">
 <h3>Features</h3>
 <p>This package contains four functions, each that accept two pandas <code>DataFrames</code> representing the train and test sets. Depending on the method, the functions will also require additional arguments depending on how the encodings are calculated for each category. For now, we aim to have our package support binary classification and regression problems.</p>
@@ -440,168 +444,6 @@ target_encoder.target_encoder(
 <h3>Documentation</h3>
 <p>The official documentation is hosted on Read the Docs: <a href="https://encoderpy.readthedocs.io/en/latest/" class="uri">https://encoderpy.readthedocs.io/en/latest/</a></p>
 </div>
-<div id="vignette" class="section level3">
-<h3>Vignette</h3>
-<p>The <strong>encoderpy</strong> package contains functions that allow for more elegant and informative encodings of <a href="https://en.wikipedia.org/wiki/Categorical_variable">categorical features</a>.</p>
-<p><strong>encodepy</strong> has four functions that implement different kinds of encodings for categorical features. Many of these functions take advantage of the response/target variable, y, to create more informative representations. Currently, <strong>encodepy</strong> only supports the tasks of binary classification and regression.</p>
-<p>In most cases, preprocessing of these features is often done using a relatively simple method such as one hot encoding. While this can achieve satisfactory results, often there are better, more <em>sparse</em> representations of these features. These more accurate and sparse representations often come with the drawback of being tedious to implement, but <strong>encodepy</strong> allows one to easily fit such encodings all with a common interface.</p>
-</div>
-</div>
-<div id="target-encoding" class="section level2">
-<h2>Target Encoding</h2>
-<p>One encoding method that has become popular in recent years is that of target encoding. Target encoding essentially uses the average observed response per each category to derive encodings for each category.</p>
-<p>First, load the mtcars dataset.</p>
-<pre class="python"><code>import pandas as pd
-from encoderpy import conjugate_encoder, target_encoder, onehot_encoder, frequency_encoder
-
-# Credit to Sean Kross for uploading the mtcars dataset to Github
-
-mtcars_data = pd.read_csv(
-&quot;https://gist.githubusercontent.com/seankross/a412dfbd88b3db70b74b/raw/5f23f993cd87c283ce766e7ac6b329ee7cc2e1d1/mtcars.csv&quot;
-)
-
-mtcars_data.head()</code></pre>
-<p>Suppose the user wishes to encode the <code>cyl</code> and the <code>vs</code> columns, which have three (4, 6 and 8 cylinders) and two categories (0 or 1) respectively. Assume further that the user wishes to predict the variable <code>mpg</code>.</p>
-<p>Then, all that is left to do is to call the function <code>target_encoder</code>:</p>
-<pre class="python"><code>frame_with_encodings = target_encoder.target_encoder(
-  X_train=mtcars_data,
-  y=mtcars['mpg'],
-  cat_columns=['cyl', 'vs'],
-  prior=0,
-  objective='regression'
-)
-
-frame_with_encodings[0].head()  </code></pre>
-<p>The user must specify <code>X_train</code>, which is a pandas <code>DataFrame</code>, a response variable <code>y</code> which is a pandas <code>Series</code>, and a list containing the names of the categorical columns the user wishes to encode. The user must also set the objective to “regression” here since the response variable is fully continuous.</p>
-<p>Observe that both the <code>cyl</code> and the <code>vs</code> columns have been replaced with fully numeric columns. An important fact to note is that the resulting tibble is that of the original dimension - in fact, there are no additional columns added after the encoding process. This is one reason why target encoding (as well as others) are effective. They do not increase the dimension of the data, which <a href="https://en.wikipedia.org/wiki/Curse_of_dimensionality">can often lead to problems.</a></p>
-<p>Either way, these new columns correspond to the learned encodings of the various categories. For example, for <code>cyl</code>, the encodings are:</p>
-<pre class="python"><code>(pd.concat(
-[frame_with_encodings[0]['cyl'], mtcars_data['cyl'].rename('cyl_orig')], axis=1)
-.drop_duplicates())</code></pre>
-<p>The encodings for each category are fairly intuitive here. Recall that the target variable is <code>mpg</code>. Thus, one can easily see that as the number of cylinders increases, the mpg decreases. This relationship is now captured in the encodings.</p>
-<div id="the-argument-x_test" class="section level3">
-<h3>The argument X_test</h3>
-<p>Often, the user splits the entire dataset into two before doing any preprocessing of the features, to prevent overfitting and to ensure an honest assessment of model performance. Preprocessing features before splitting may lead to information being leaked from the test set.</p>
-<p>Encodings are no exception to this rule. For more common methods such as one hot encoding, users typically do not need to worry about information leakage since each row is still treated independently of all others. However, for target encoding and conjugate encoding it is vital that the dataset is split before since these methods average over multiple rows and also involve the response/target variable.</p>
-<p>The <strong>encoderpy</strong> package has been designed so that the user does not need to worry about any potential data leakage. The encodings are learned strictly on <code>X_train</code> and are then joined to <code>X_test</code>.</p>
-<p>The user can easily do this by supplying an <em>optional</em> argument to <code>X_test</code> to any of the encoding functions like so:</p>
-<pre class="python"><code>mtcars_train = mtcars_data.iloc[0:30, ]
-mtcars_test = mtcars_data.iloc[30:mtcars_data.shape[0], ]
-
-my_encodings = target_encoder.target_encoder(
-  X_train=mtcars_train,
-  X_test=mtcars_test,
-  y=mtcars_train['mpg'], 
-  cat_columns=['cyl'],
-  prior=0.7,
-  objective='regression'
-)
-
-# Output the training set, which is stored in the 0th element
-my_encodings[0].head()
-# Output the test set, which is stored in the 1st element
-my_encodings[1].head()</code></pre>
-<p>Observe that the encoder function now returns a list with two tibbles labelled <code>train</code> and <code>test</code>. The two tibbles returned contain the preprocessed <code>X_train</code> and <code>X_test</code> <code>DataFrames</code>, respectively.</p>
-<p>Note that when using <code>target_encoder</code> that if there are categories that do not appear in the training set but do appear in the test set, these categories are encoded with the group mean (see below) of the target variable.</p>
-</div>
-<div id="the-prior-parameter" class="section level3">
-<h3>The Prior Parameter</h3>
-<p>Target encoding is highly susceptible to overfitting since the estimated relationship between the categories in the training set may not necessarily be true in general.</p>
-<p>The <code>prior</code> paramter in <code>target_encoding</code> allows us to address this issue through the use of Laplace smoothing. The idea of Laplace smoothing is to use a weighted average of the mean of the response variable and the conditional mean per each category. The result is a smoothed estimate that, with a suitable <code>prior</code> chosen, is less prone to overfitting.</p>
-<p>A larger <code>prior</code> parameter places more weight on the group mean, whereas a lower prior puts more trust in the data.</p>
-<p>If one repeats the example above but with a prior of 5:</p>
-<pre class="python"><code>frame_with_encodings = target_encoder.target_encoder(
-  X_train=mtcars_train,
-  y=mtcars_train['mpg'],
-  cat_columns=['cyl'],
-  prior=5,
-  objective='regression'
-)
-
-(pd.concat(
-[frame_with_encodings[0]['cyl'], mtcars_data['cyl'].rename('cyl_orig')], axis=1)
-.drop_duplicates())</code></pre>
-<p>Observe that the encodings for 6 and 8 cylinders have been dragged slightly up, whereas the encodings for 4 cylinders has been dragged down. This is because 6 and 8 cylinder vehicles have lower than average miles per gallon, whereas 4 cylinder vehicles have higher than average miles per gallon.</p>
-</div>
-</div>
-<div id="frequency-encoding" class="section level2">
-<h2>Frequency Encoding</h2>
-<p>Another more recently popular method of encoding (especially in Kaggle competitions) is that of frequency encoding. Frequency encoding derives its encodings by using the observed frequency of each class. The intuition behind such an encoding is that those categories that appear the most should be assigned higher weight than those that do not.</p>
-<p>The usage of the function <code>frequency_encoder</code> is straightforward. Note that this function does not require a <code>y</code> or <code>objective</code> argument, because it does not make use of the response/target when deriving its encodings.</p>
-<pre class="python"><code>encodings_freq = frequency_encoder.frequency_encoder(
-  X_train=mtcars_train,
-  cat_columns = ['cyl']
-)
-
-encodings_freq[0].head()</code></pre>
-<p>We see that the <code>cyl</code> column has been replaced by the learned frequencies of each category, as expected.</p>
-<p>Note that currently, this function does not implement Laplace smoothing like in <code>target_encoder</code>. Thus, observations that do not appear in the train set but do appear in the test are given 0 frequencies.</p>
-<pre class="python"><code>no_8 = mtcars_train.query('cyl != 8')
-
-encodings_freq = frequency_encoder.frequency_encoder(
-  X_train=no_8,
-  X_test=mtcars_test,
-  cat_columns=['cyl']
-)
-
-# Output test set
-encodings_freq[1].head()</code></pre>
-<p>Observe now that for the Maserati Bora, the encoding is 0 since no other cars with 8 cylinders existed in the dataset.</p>
-</div>
-<div id="conjugate-encoding" class="section level2">
-<h2>Conjugate Encoding</h2>
-<p>This method for encoding categorical features is based on a <a href="https://arxiv.org/pdf/1904.13001.pdf">very recent paper</a> by Slakey et al. (2019). At a very high level, this paper reworks target encoding in a full Bayesian framework so that each category in a particular column has a posterior distribution using the response as the observed data. The first k moments of the posterior distributions are then used as the encodings.</p>
-<p>The paper only discusses the use of this method through <a href="https://en.wikipedia.org/wiki/Conjugate_prior">conjugate priors</a> for computational reasons, but in theory any arbitrary prior and likelihood can be used.</p>
-<p>To use this method, one must specify prior parameters depending on the objective to the argument <code>prior_params</code>. In the <code>objective = &quot;regression&quot;</code> case, the dictionary must have four keys: mu, vega, alpha, and beta, which correspond to the parameters of a <a href="https://en.wikipedia.org/wiki/Normal-inverse-gamma_distribution">Normal-Inverse-gamma distribution</a>. Vega, alpha, and beta must all be greater than 0. mu can be any real number.</p>
-<p>Using the function <code>conjugate_encoder</code> is relatively straightforward:</p>
-<pre class="python"><code>prior_values = {'mu': 0, 'vega': 3, 'alpha': 1, 'beta': 1}
-encodings_conjugate = conjugate_encoder.conjugate_encoder(
-  X_train=mtcars_train,
-  X_test=mtcars_test,
-  y=mtcars_train['mpg'],
-  prior_params=prior_values,
-  cat_columns=['cyl'],
-  objective='regression'
-)
-
-(pd.concat(
-[encodings_conjugate[0].loc[:, ['encoded_mean_cyl', 'encoded_var_cyl']], mtcars_data['cyl'].rename('cyl_orig')], axis=1)
-.drop_duplicates())</code></pre>
-<p>As one can see, the encodings are fairly similar to that of <code>target_encoder</code> but with more flexibility via. the explicit modelling of the posterior.</p>
-<p>Note that the Normal-Inverse-gamma distribution is bivariate. In other words, we assumed that the likelihood has unknown mean and unknown variance.</p>
-<p>In general, the Normal-Inverse-gamma distribution is parameterized such that the density is a function of two random variables. Thus, the second column shown above, <code>cyl_encoded_var</code> is the expected value of the second random variable.</p>
-<div id="classification-conjugate-encoding" class="section level3">
-<h3>Classification Conjugate Encoding</h3>
-<p>Changing the objective to “binary” in <code>target_encoder</code> makes no difference since it just calculates the mean of y, regardless if it is binary or fully continiuous. However, for <code>conjugate_encoder</code> this is not true since the likelihood used is specifically chosen to handle binary outcomes (a binomial).</p>
-<p>For classification, the user must specify a list with two named arguments for <code>prior_params</code>; alpha and beta. These variables correspond to the parameters of a <a href="https://en.wikipedia.org/wiki/Beta_distribution">beta distribution.</a></p>
-<p>Otherwise, the usage is exactly the same as above:</p>
-<pre class="python"><code>prior_values = {'alpha': 1, 'beta': 1}
-encodings_conjugate = conjugate_encoder.conjugate_encoder(
-      X_train=mtcars_train,
-      X_test=mtcars_test,
-      y=mtcars_train['vs'],
-      prior_params=prior_values,
-      cat_columns=['cyl'],
-      objective='binary'
-    )
-
-(pd.concat(
-[encodings_conjugate[0].loc[:, ['cyl']], mtcars_data['cyl'].rename('cyl_orig')], axis=1)
-.drop_duplicates())</code></pre>
-<p>Note that in this case, the target variable has changed to the binary variable <code>vs</code>. The column <code>cyl</code> is the expected value of the posterior distribution (also a beta).</p>
-</div>
-</div>
-<div id="one-hot-encoding" class="section level2">
-<h2>One Hot Encoding</h2>
-<p><strong>encoderpy</strong> would not be complete without including the most popular method for encoding categorical features. This method creates k-1 columns of 0/1 indicator variables, where k is the number of categories. This is a completely uninformative method, but the syntax remains the same for consistency.</p>
-<pre class="python"><code>ohe_encodings = onehot_encoder.onehot_encoder(
-  X_train=mtcars_train,
-  X_test=mtcars_test,
-  cat_columns=['cyl']
-)
-
-ohe_encodings[0].head()
-ohe_encodings[1].head()</code></pre>
 <div id="credits" class="section level3">
 <h3>Credits</h3>
 <p>This package was created with Cookiecutter and the UBC-MDS/cookiecutter-ubc-mds project template, modified from the <a href="https://github.com/pyOpenSci/cookiecutter-pyopensci">pyOpenSci/cookiecutter-pyopensci</a> project template and the <a href="https://github.com/audreyr/cookiecutter-pypackage">audreyr/cookiecutter-pypackage</a>.</p>
