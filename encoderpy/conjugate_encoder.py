@@ -32,9 +32,10 @@ def conjugate_encoder(
             A dictionary of parameters for each prior distribution assumed.
             For regression, this requires a dictionary with four keys and four
             values: mu, vega, alpha, beta. All must be real numbers, and must
-            be greater than 0 except for mu, which can be negative. For binary
-            classification, this requires a dictionary with two keys and two
-            values: alpha, beta. All must be realnumbers and be greater than
+            be greater than 0 except for mu, which can be negative. A value of
+            alpha > 1 is strongly advised. For binary classification,
+            this requires a dictionary with two keys and two
+            values: alpha, beta. All must be real numbers and be greater than
             0.
     objective : str
             A string, either "regression" or "binary" specifying the problem.
@@ -97,7 +98,7 @@ def conjugate_encoder(
         if (prior_params['vega'] <= 0 or
                 prior_params['beta'] <= 0 or
                 prior_params['alpha'] <= 0):
-            raise Exception("Invalid prior specification. Vega, alpha and"
+            raise Exception("Invalid prior specification. vega, alpha and"
                             "beta should all be positive.")
 
         mu = prior_params['mu']
@@ -122,8 +123,8 @@ def conjugate_encoder(
 
             if conditionals['encoded_var'].isnull().any():
                 raise Exception(
-                    "NA's fitted for expected variance. The variance of a"
-                    "single data point does not exist. Make sure columns"
+                    "NA's fitted for expected variance. The variance of a "
+                    "single data point does not exist. Make sure columns "
                     "specified are truly categorical.")
 
             mu_post = (vega * mu + n *
@@ -144,14 +145,15 @@ def conjugate_encoder(
                 all_encodings, on=col, how="left")
 
             if X_test is not None:
-                prior_var = beta / (alpha - 1)
                 test_processed = test_processed.merge(
                     all_encodings, on=col, how="left")
-                test_processed['encoded_mean' +
-                               "_" +
-                               col] = test_processed['encoded_mean' +
-                                                     "_" +
-                                                     col].fillna(mu)
+                test_processed['encoded_mean' + "_" + col] = test_processed[
+                    'encoded_mean' + "_" + col].fillna(mu)
+                if alpha == 1:
+                    raise Exception(
+                            "Cannot fill missing values in test if alpha is "
+                            "1.")
+                prior_var = beta / (alpha - 1)
                 test_processed['encoded_var' +
                                "_" +
                                col] = test_processed['encoded_var' +

@@ -192,6 +192,20 @@ def test_check_regression():
         },
             objective='regression')
 
+    # test for alpha = 1 and missing value in test set
+    with pytest.raises(Exception):
+        conjugate_encoder.conjugate_encoder(X_train=train2,
+                                            y=train2.target_cont,
+                                            cat_columns=['feature_cat_chr'],
+                                            X_test=test2,
+                                            prior_params={
+                                                'mu': 1,
+                                                'vega': 10,
+                                                'alpha': 1,
+                                                'beta': 2
+                                                },
+                                            objective='regression')
+
     train_encode1, test_encode1 = conjugate_encoder.conjugate_encoder(
         X_train=train1,
         y=train1.target_cont,
