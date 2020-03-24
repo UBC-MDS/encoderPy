@@ -37,7 +37,6 @@ def onehot_encoder(X_train, cat_columns, X_test=None):
     cat_columns = ['foo'])
 
     >>> train_new = encodings[0]
-    >>> test_new = encodings[1]
 
     """
 
@@ -122,5 +121,3 @@ def onehot_encoder(X_train, cat_columns, X_test=None):
         test_processed = results.drop(columns=['tobedeleted'])
 
         return [train_processed, test_processed]
-
-    
