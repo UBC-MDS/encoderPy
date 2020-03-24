@@ -15,18 +15,19 @@ def onehot_encoder(X_train, cat_columns, X_test=None):
           some categorical features/columns.
     X_test : pd.DataFrame
           A pandas dataframe representing the test set, containing some set
-          of categorical features/columns.
+          of categorical features/columns. This is an optional argument.
     cat_columns : list
-          The names of the categorical features required to encode.
+          The names of the categorical features in X_train and/or X_test.
 
     Returns
     -------
     train_processed : pd.DataFrame
-        The training set, with the categorical columns specified by the
-        argument cat_columns replaced by their encodings.
+          The training set, with the categorical columns specified by the
+          argument cat_columns replaced by their encodings.
     test_processed : pd.DataFrame
-        The test set, with the categorical columns specified by the argument
-        cat_columns replaced by the learned encodings from the training set.
+          The test set, with the categorical columns specified by the argument
+          cat_columns replaced by the learned encodings from the training set.
+          This is not returned if X_test is None.
 
     Examples
     -------
@@ -36,7 +37,6 @@ def onehot_encoder(X_train, cat_columns, X_test=None):
     cat_columns = ['foo'])
 
     >>> train_new = encodings[0]
-    >>> test_new = encodings[1]
 
     """
 
@@ -85,7 +85,7 @@ def onehot_encoder(X_train, cat_columns, X_test=None):
     # Process X_test data
     if X_test is None:
 
-        test_processed = X_test
+        return train_processed
 
     else:
 
@@ -120,4 +120,4 @@ def onehot_encoder(X_train, cat_columns, X_test=None):
         # remove empty column created initially
         test_processed = results.drop(columns=['tobedeleted'])
 
-    return [train_processed, test_processed]
+        return [train_processed, test_processed]
