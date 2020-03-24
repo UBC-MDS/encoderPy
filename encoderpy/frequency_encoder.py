@@ -8,30 +8,30 @@ def frequency_encoder(X_train, cat_columns, X_test=None, prior=0.5):
     Parameters
     ----------
     X_train : pd.DataFrame
-            A pandas dataframe representing the training data set
-            containing some categorical features/columns.
+          A pandas dataframe representing the training data set
+          containing some categorical features/columns.
     X_test : pd.DataFrame
-            A pandas dataframe representing the test set, containing some set
-            of categorical features/columns. This is an optional argument.
+          A pandas dataframe representing the test set, containing some set
+          of categorical features/columns. This is an optional argument.
     cat_columns : list
-            The names of the categorical features in X_train and/or X_test.
+          The names of the categorical features in X_train and/or X_test.
     prior : float
-            A number in [0, inf] that acts as pseudo counts when calculating
-            the encodings. Useful for preventing encodings of 0 for when the
-            training set does not have particular categories observed in the
-            test set. A larger value gives less weight to what is observed in
-            the training set. A value of 0 incorporates no prior information.
-            The default value is 0.5.
+          A number in [0, inf] that acts as pseudo counts when calculating
+          the encodings. Useful for preventing encodings of 0 for when the
+          training set does not have particular categories observed in the
+          test set. A larger value gives less weight to what is observed in
+          the training set. A value of 0 incorporates no prior information.
+          The default value is 0.5.
 
     Returns
     -------
     train_processed : pd.DataFrame
-            The training set, with the categorical columns specified by the
-            argument cat_columns replaced by their encodings.
+          The training set, with the categorical columns specified by the
+          argument cat_columns replaced by their encodings.
     test_processed : pd.DataFrame
-            The test set, with the categorical columns specified by the argument
-            cat_columns replaced by the learned encodings from the training set.
-            This is not returned if X_test is None.
+          The test set, with the categorical columns specified by the argument
+          cat_columns replaced by the learned encodings from the training set.
+          This is not returned if X_test is None.
 
     Examples
     -------
