@@ -41,7 +41,7 @@ def conjugate_encoder(
           A string, either "regression" or "binary" specifying the problem.
           Default is regression. For regression, a normal-inverse gamma
           prior + normal likelihood is assumed. For binary classification, a
-          beta prior with binomial lik elihood is assumed.
+          beta prior with binomial likelihood is assumed.
 
     Returns
     -------
