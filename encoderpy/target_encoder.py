@@ -34,10 +34,10 @@ def target_encoder(
             The default value is 0.5.
     X_test : pd.DataFrame
             A pandas dataframe representing the test set, containing some set
-            of categorical features/columns. default None.
+            of categorical features/columns. This is an optional argument.
     objective : string
-            Either "regression" or "binary" specifying the problem. Default is
-            regression.
+            A string, either "regression" or "binary" specifying the problem.
+            Default is regression. 
 
     Returns
     -------
@@ -45,9 +45,9 @@ def target_encoder(
             The training set, with the categorical columns specified by the
             argument cat_columns replaced by their encodings.
     test_processed : pd.DataFrame
-            The test set, with the categorical columns specified by the
-            argument cat_columns replaced by the learned encodings from the
-            training set. This is an optional argument.
+            The test set, with the categorical columns specified by the argument
+            cat_columns replaced by the learned encodings from the training set.
+            This is not returned if X_test is None.
 
     Examples
     -------

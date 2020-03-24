@@ -9,6 +9,7 @@ def conjugate_encoder(
         prior_params,
         X_test=None,
         objective="regression"):
+
     """This function encodes categorical variables by fitting a posterior
     distribution per each category to the target variable y, using a known
     conjugate-prior. The resulting mean(s) of each posterior distribution per
@@ -19,9 +20,6 @@ def conjugate_encoder(
     X_train : pd.DataFrame
             A pandas dataframe representing the training data set containing
             some categorical features/columns.
-    X_test : pd.DataFrame
-            A pandas dataframe representing the test set, containing some set
-            of categorical features/columns. This is an optional argument.
     y : pd.Series
             A pandas series representing the target variable. If the objective
             is "binary", then this series should only contain two unique
@@ -37,11 +35,14 @@ def conjugate_encoder(
             this requires a dictionary with two keys and two
             values: alpha, beta. All must be real numbers and be greater than
             0.
+    X_test : pd.DataFrame
+            A pandas dataframe representing the test set, containing some set
+            of categorical features/columns. This is an optional argument.
     objective : str
             A string, either "regression" or "binary" specifying the problem.
             Default is regression. For regression, a normal-inverse gamma
             prior + normal likelihood is assumed. For binary classification, a
-            beta prior with binomial likelihood is assumed.
+            beta prior with binomial lik elihood is assumed.
 
     Returns
     -------
@@ -54,7 +55,7 @@ def conjugate_encoder(
     test_processed : pd.DataFrame
           The test set, with the categorical columns specified by the argument
           cat_columns replaced by the learned encodings from the training set.
-          This is returned if X_test is not None.
+          This is not returned if X_test is None.
 
     References
     ----------

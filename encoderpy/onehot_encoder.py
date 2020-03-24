@@ -14,10 +14,10 @@ def onehot_encoder(X_train, cat_columns, X_test=None):
           A pandas dataframe representing the training data set containing
           some categorical features/columns.
     X_test : pd.DataFrame
-          A pandas dataframe representing the test set, containing some set
-          of categorical features/columns.
+          A pandas dataframe representing the test set, containing some set 
+          of categorical features/columns. This is an optional argument.
     cat_columns : list
-          The names of the categorical features required to encode.
+          The names of the categorical features in X_train and/or X_test.
 
     Returns
     -------
@@ -26,7 +26,8 @@ def onehot_encoder(X_train, cat_columns, X_test=None):
         argument cat_columns replaced by their encodings.
     test_processed : pd.DataFrame
         The test set, with the categorical columns specified by the argument
-        cat_columns replaced by the learned encodings from the training set.
+            cat_columns replaced by the learned encodings from the training set.
+            This is not returned if X_test is None.
 
     Examples
     -------
