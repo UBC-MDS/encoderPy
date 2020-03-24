@@ -26,8 +26,8 @@ def onehot_encoder(X_train, cat_columns, X_test=None):
         argument cat_columns replaced by their encodings.
     test_processed : pd.DataFrame
         The test set, with the categorical columns specified by the argument
-            cat_columns replaced by the learned encodings from the training set.
-            This is not returned if X_test is None.
+        cat_columns replaced by the learned encodings from the training set.
+        This is not returned if X_test is None.
 
     Examples
     -------
