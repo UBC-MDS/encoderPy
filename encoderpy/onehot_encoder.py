@@ -86,7 +86,7 @@ def onehot_encoder(X_train, cat_columns, X_test=None):
     # Process X_test data
     if X_test is None:
 
-        test_processed = X_test
+        return train_processed
 
     else:
 
@@ -121,4 +121,6 @@ def onehot_encoder(X_train, cat_columns, X_test=None):
         # remove empty column created initially
         test_processed = results.drop(columns=['tobedeleted'])
 
-    return [train_processed, test_processed]
+        return [train_processed, test_processed]
+
+    
