@@ -37,7 +37,7 @@ def target_encoder(
           of categorical features/columns. This is an optional argument.
     objective : string
           A string, either "regression" or "binary" specifying the problem.
-          Default is regression. 
+          Default is regression.
 
     Returns
     -------
