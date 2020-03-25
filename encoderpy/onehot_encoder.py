@@ -40,8 +40,7 @@ def onehot_encoder(X_train, cat_columns, X_test=None):
 
     """
 
-    # Check that input is valid
-
+    # check if input cat_columns is a list
     if isinstance(cat_columns, list) is False:
         raise Exception("cat_columns must be a list type")
 
@@ -52,15 +51,16 @@ def onehot_encoder(X_train, cat_columns, X_test=None):
 
     else:
 
-        # Check that input is valid
+        # check if input X_train is a data frame
         if isinstance(X_train, pd.DataFrame) is False:
             raise Exception("X_train must be a pandas Dataframe type")
-
+        # add temporary data frame for X_train
         data = X_train
         results = pd.DataFrame(
             np.nan, index=np.arange(
                 data.shape[0]), columns=['tobedeleted'])
-
+        
+        # Perform one hot encoding for training dataset
         for i in data.columns:
 
             if i in cat_columns:
@@ -69,8 +69,9 @@ def onehot_encoder(X_train, cat_columns, X_test=None):
                 df.insert(df.shape[1], "values", 1.0)
                 OH_df = df.pivot(values="values", columns=i).fillna(0)
                 for j in OH_df.columns:
+                    # rename columns
                     OH_df.rename({j: i + '_' + str(j)}, axis=1,
-                                 inplace=True)  # Rename Columns
+                                 inplace=True)  
                 # Add OH converted columns to results
                 results = pd.concat([results, OH_df], axis=1)
 
@@ -92,12 +93,13 @@ def onehot_encoder(X_train, cat_columns, X_test=None):
         # Check that input is valid
         if isinstance(X_test, pd.DataFrame) is False:
             raise Exception("X_test must be a pandas Dataframe type")
-
+        # add temporary data frame for X_test  
         data = X_test
         results = pd.DataFrame(
             np.nan, index=np.arange(
                 data.shape[0]), columns=['tobedeleted'])
 
+        # perform one hot encoding for testing dataset
         for i in data.columns:
 
             if i in cat_columns:
@@ -106,8 +108,9 @@ def onehot_encoder(X_train, cat_columns, X_test=None):
                 df.insert(df.shape[1], "values", 1.0)
                 OH_df = df.pivot(values="values", columns=i).fillna(0)
                 for j in OH_df.columns:
+                    # rename columns
                     OH_df.rename({j: i + '_' + str(j)}, axis=1,
-                                 inplace=True)  # Rename Columns
+                                 inplace=True)  
 
                 # Add OH converted columns to results
                 results = pd.concat([results, OH_df], axis=1)
