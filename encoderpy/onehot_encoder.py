@@ -59,7 +59,7 @@ def onehot_encoder(X_train, cat_columns, X_test=None):
         results = pd.DataFrame(
             np.nan, index=np.arange(
                 data.shape[0]), columns=['tobedeleted'])
-        
+
         # Perform one hot encoding for training dataset
         for i in data.columns:
 
@@ -71,7 +71,7 @@ def onehot_encoder(X_train, cat_columns, X_test=None):
                 for j in OH_df.columns:
                     # rename columns
                     OH_df.rename({j: i + '_' + str(j)}, axis=1,
-                                 inplace=True)  
+                                 inplace=True)
                 # Add OH converted columns to results
                 results = pd.concat([results, OH_df], axis=1)
 
@@ -93,7 +93,7 @@ def onehot_encoder(X_train, cat_columns, X_test=None):
         # Check that input is valid
         if isinstance(X_test, pd.DataFrame) is False:
             raise Exception("X_test must be a pandas Dataframe type")
-        # add temporary data frame for X_test  
+        # add temporary data frame for X_test
         data = X_test
         results = pd.DataFrame(
             np.nan, index=np.arange(
@@ -110,7 +110,7 @@ def onehot_encoder(X_train, cat_columns, X_test=None):
                 for j in OH_df.columns:
                     # rename columns
                     OH_df.rename({j: i + '_' + str(j)}, axis=1,
-                                 inplace=True)  
+                                 inplace=True)
 
                 # Add OH converted columns to results
                 results = pd.concat([results, OH_df], axis=1)
