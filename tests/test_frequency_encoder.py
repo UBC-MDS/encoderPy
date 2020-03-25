@@ -1,8 +1,7 @@
 from encoderpy import frequency_encoder
 import pandas as pd
 import numpy as np
-# import pytest (uncomment this once you use this. flake8 does not pass if
-# you call modules that are never used.)
+
 
 data = pd.read_csv("data/testing_data.csv")
 
