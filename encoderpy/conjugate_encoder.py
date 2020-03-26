@@ -74,24 +74,31 @@ def conjugate_encoder(
     >>> train_new = encodings[0]
 
     """
-
+    # check the input of objective function
     if objective not in ['regression', 'binary']:
         raise Exception("Objective must be either regression or binary.")
+    # check if X_train contains cat_columns
     if (set(cat_columns).issubset(X_train.columns)) is False:
         raise Exception("X_train must contain cat_columns.")
+    # check if input cat_columns is a list
     if isinstance(cat_columns, list) is False:
         raise Exception("Type of cat_columns must be a list.")
+    # check if input X_train is a data frame
     if (isinstance(X_train, pd.DataFrame)) is False:
         raise Exception("Type of X_train must be pd.Dataframe.")
+    # check if input y is a pandas series
     if isinstance(y, pd.Series) is False:
         raise Exception("Type of y must be pd.Series.")
 
     if X_test is not None:
+        # check if X_test contains cat_columns
         if (set(cat_columns).issubset(X_test.columns)) is False:
             raise Exception("X_test must contain cat_columns.")
+        # check if input X_test is a data frame
         if (isinstance(X_test, pd.DataFrame)) is False:
             raise Exception("X_test must be pd.Dataframe.")
 
+    # for regression case, check if prior specification is valid
     if objective == "regression":
         if set(prior_params.keys()).issubset(
                 set(["mu", "alpha", "beta", "vega"])) is False:
@@ -105,13 +112,13 @@ def conjugate_encoder(
                 prior_params['alpha'] <= 0):
             raise Exception("Invalid prior specification. vega, alpha and"
                             "beta should all be positive.")
-
+        # set prior parameters
         mu = prior_params['mu']
         alpha = prior_params['alpha']
         vega = prior_params['vega']
         beta = prior_params['beta']
         n = X_train.shape[0]
-
+        # make sure the size of X_train is not 0
         if n == 1:
             raise Exception("Cannot fit encodings with only one data point.")
 
@@ -121,54 +128,61 @@ def conjugate_encoder(
             test_processed = X_test.copy()
 
         for col in cat_columns:
-
+            # calculate mean and variance from column y
             conditionals = train_processed.groupby(
                 col)[y.name].aggregate(['mean', 'var'])
             conditionals.columns = ['encoded_mean', 'encoded_var']
-
+            # check if there is NA in encoded variance
             if conditionals['encoded_var'].isnull().any():
                 raise Exception(
                     "NA's fitted for expected variance. The variance of a "
                     "single data point does not exist. Make sure columns "
                     "specified are truly categorical.")
-
+            # set posterior value for parameters
             mu_post = (vega * mu + n *
                        conditionals['encoded_mean']) / (vega + n)
             alpha_post = alpha + n / 2
             beta_post = beta + 0.5 * n * conditionals['encoded_var'] + (
                 (n * vega) / (vega + n)) * (((conditionals['encoded_mean'] -
                                               mu)**2) / 2)
-
+            # encode the variables
             all_encodings = pd.concat(
                 [mu_post, beta_post / (alpha_post - 1)], axis=1).reset_index()
             all_encodings.columns = [
                 col,
                 'encoded_mean' + "_" + col,
                 'encoded_var' + "_" + col]
-
+            # merge the encoded value to new training dataset
             train_processed = train_processed.merge(
                 all_encodings, on=col, how="left")
 
             if X_test is not None:
+                # merge the encoded value to new testing dataset
                 test_processed = test_processed.merge(
                     all_encodings, on=col, how="left")
                 test_processed['encoded_mean' + "_" + col] = test_processed[
                     'encoded_mean' + "_" + col].fillna(mu)
+                # check if alpha parameter valid
                 if alpha == 1:
                     raise Exception(
                             "Cannot fill missing values in test if alpha is "
                             "1.")
+                # calculate prior of variance
                 prior_var = beta / (alpha - 1)
+                # encode the values exists only in test dataset
                 test_processed['encoded_var' +
                                "_" +
                                col] = test_processed['encoded_var' +
                                                      "_" +
                                                      col].fillna(prior_var)
+                # drop orignial columns
                 test_processed = test_processed.drop(columns=col, axis=1)
 
             train_processed = train_processed.drop(columns=col, axis=1)
 
+    # for binary case
     else:
+        # check if the prior specification are valid
         if set(prior_params.keys()).issubset(set(["alpha", "beta"])) is False:
             raise Exception(
                 "Invalid prior specification. The dictionary must include"
@@ -178,7 +192,7 @@ def conjugate_encoder(
             raise Exception(
                 "Invalid prior specification. alpha and beta should all be"
                 "positive.")
-
+        # check if the response variable is binary
         if len(set(y)) != 2:
             raise Exception(
                 "Binary classification can only have two unique values.")
@@ -186,7 +200,7 @@ def conjugate_encoder(
         y = y.copy()
         if y.dtype == "object":
             y = np.where(y == y.unique()[0], 0, 1)
-
+        # set prior parameters
         alpha = prior_params['alpha']
         beta = prior_params['beta']
         n = X_train.shape[0]
@@ -197,18 +211,18 @@ def conjugate_encoder(
             test_processed = X_test.copy()
 
         for col in cat_columns:
-
+            # calculate the sum from column y
             conditionals = train_processed.groupby(
                 col)[y.name].aggregate(['sum'])
             conditionals.columns = ['encoded_sum']
-
+            # set posterior value for parameters
             alpha_post = alpha + conditionals['encoded_sum']
             beta_post = beta + n - conditionals['encoded_sum']
             posterior_mean = (alpha_post / (alpha_post + beta_post)).to_dict()
-
+            # map the encoded values from training dataset
             train_processed.loc[:, col] = train_processed[col].map(
                 posterior_mean)
-
+            # map the encoded values from testing dataset
             if X_test is not None:
                 prior_mean = alpha / (alpha + beta)
                 test_processed.loc[:, col] = test_processed[col].map(
