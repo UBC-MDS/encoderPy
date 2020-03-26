@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "encoderPy"
-version = "0.2.3"
+version = "0.2.4"
 description = "A collection of categorical encoders in Python."
 authors = ["braydentang1 <brayden.tang1@gmail.com>"]
 license = "MIT"
