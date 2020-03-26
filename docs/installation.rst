@@ -32,13 +32,13 @@ You can either clone the public repository:
 
 .. code-block:: console
 
-    $ git clone git://github.com/braydentang1/encoderpy
+    $ git clone git://github.com/UBC-MDS/encoderpy
 
 Or download the `tarball`_:
 
 .. code-block:: console
 
-    $ curl  -OL https://github.com/braydentang1/encoderpy/tarball/master
+    $ curl  -OL https://github.com/UBC-MDS/encoderpy/tarball/master
 
 Once you have a copy of the source, you can install it with:
 
@@ -47,5 +47,5 @@ Once you have a copy of the source, you can install it with:
     $ python setup.py install
 
 
-.. _Github repo: https://github.com/braydentang1/encoderpy
-.. _tarball: https://github.com/braydentang1/encoderpy/tarball/master
+.. _Github repo: https://github.com/UBC-MDS/encoderPy
+.. _tarball: https://github.com/UBC-MDS/encoderPy/tarball/master
