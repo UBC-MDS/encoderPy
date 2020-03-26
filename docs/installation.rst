@@ -12,7 +12,7 @@ To install encoderPy, run this command in your terminal:
 
 .. code-block:: console
 
-    $ pip install -i https://test.pypi.org/simple/ encoderpy
+    $ pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple encoderpy
 
 This is the preferred method to install encoderPy, as it will always install the most recent stable release.
 
